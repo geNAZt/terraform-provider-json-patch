@@ -50,10 +50,10 @@ func dataSourceYamlPatchRead(ctx context.Context, d *schema.ResourceData, meta i
 	}
 
 	document = string(jsonDocument)
-	patches := d.Get("patches").([]string)
+	patches := d.Get("patches").([]interface{})
 
 	for _, patch := range patches {
-		patchedDocument, err := jsonpatch.MergePatch([]byte(document), []byte(patch))
+		patchedDocument, err := jsonpatch.MergePatch([]byte(document), []byte(patch.(string)))
 		if err != nil {
 			return diag.FromErr(err)
 		}

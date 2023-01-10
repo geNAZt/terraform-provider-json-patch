@@ -32,10 +32,10 @@ func dataSourceJsonPatch() *schema.Resource {
 
 func dataSourceJsonPatchRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	document := d.Get("document").(string)
-	patches := d.Get("patches").([]string)
+	patches := d.Get("patches").([]interface{})
 
 	for _, patch := range patches {
-		patchedDocument, err := jsonpatch.MergePatch([]byte(document), []byte(patch))
+		patchedDocument, err := jsonpatch.MergePatch([]byte(document), []byte(patch.(string)))
 		if err != nil {
 			return diag.FromErr(err)
 		}
