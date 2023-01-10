@@ -35,7 +35,17 @@ func dataSourceJsonPatchRead(ctx context.Context, d *schema.ResourceData, meta i
 	patches := d.Get("patches").([]interface{})
 
 	for _, patch := range patches {
-		patchedDocument, err := jsonpatch.MergePatch([]byte(document), []byte(patch.(string)))
+		patchStr := patch.(string)
+		if patchStr == "" {
+			continue
+		}
+
+		patch, err := jsonpatch.DecodePatch([]byte(patchStr))
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
+		patchedDocument, err := patch.Apply([]byte(document))
 		if err != nil {
 			return diag.FromErr(err)
 		}
