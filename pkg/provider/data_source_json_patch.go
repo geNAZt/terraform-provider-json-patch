@@ -34,16 +34,12 @@ func dataSourceJsonPatch() *schema.Resource {
 
 func dataSourceJsonPatchRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
 	document := d.Get("document").(string)
-	patches := d.Get("patches").([]interface{})
+	patches := d.Get("patches").([]any)
 
 	tflog.Info(ctx, fmt.Sprintf("Document: %s", document))
 
 	for _, patch := range patches {
 		tflog.Info(ctx, fmt.Sprintf("Patch: %v", patch))
-
-		if patch == nil {
-			continue
-		}
 
 		patchStr := patch.(string)
 		if patchStr == "" {
@@ -63,6 +59,13 @@ func dataSourceJsonPatchRead(ctx context.Context, d *schema.ResourceData, meta i
 		document = string(patchedDocument)
 	}
 
-	d.Set("patched", document)
+	err := d.Set("patched", document)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	tflog.Info(ctx, fmt.Sprintf("Patched: %s", document))
+	d.SetId(MakeId([]byte(document)))
+
 	return nil
 }

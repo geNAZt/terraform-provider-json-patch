@@ -52,16 +52,12 @@ func dataSourceYamlPatchRead(ctx context.Context, d *schema.ResourceData, meta i
 	}
 
 	document = string(jsonDocument)
-	patches := d.Get("patches").([]interface{})
+	patches := d.Get("patches").([]any)
 
 	tflog.Info(ctx, fmt.Sprintf("Document: %s", document))
 
 	for _, patch := range patches {
 		tflog.Info(ctx, fmt.Sprintf("Patch: %v", patch))
-
-		if patch == nil {
-			continue
-		}
 
 		patchStr := patch.(string)
 		if patchStr == "" {
@@ -93,6 +89,13 @@ func dataSourceYamlPatchRead(ctx context.Context, d *schema.ResourceData, meta i
 		return diag.FromErr(err)
 	}
 
-	d.Set("patched", string(yamlDocument))
+	err = d.Set("patched", string(yamlDocument))
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	tflog.Info(ctx, fmt.Sprintf("Patched: %s", yamlDocument))
+
+	d.SetId(MakeId(yamlDocument))
 	return nil
 }
