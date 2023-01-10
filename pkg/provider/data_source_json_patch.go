@@ -35,6 +35,10 @@ func dataSourceJsonPatchRead(ctx context.Context, d *schema.ResourceData, meta i
 	patches := d.Get("patches").([]interface{})
 
 	for _, patch := range patches {
+		if patch == nil {
+			continue
+		}
+
 		patchStr := patch.(string)
 		if patchStr == "" {
 			continue
