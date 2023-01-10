@@ -7,8 +7,8 @@ import (
 func Provider() *schema.Provider {
 	return &schema.Provider{
 		DataSourcesMap: map[string]*schema.Resource{
-			"json_patch": dataSourceJsonPatch(),
-			"yaml_patch": dataSourceYamlPatch(),
+			"json-patch_json_patch": dataSourceJsonPatch(),
+			"json-patch_yaml_patch": dataSourceYamlPatch(),
 		},
 	}
 }
