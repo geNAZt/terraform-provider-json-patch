@@ -2,7 +2,9 @@ package provider
 
 import (
 	"context"
+	"fmt"
 
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 
@@ -34,7 +36,11 @@ func dataSourceJsonPatchRead(ctx context.Context, d *schema.ResourceData, meta i
 	document := d.Get("document").(string)
 	patches := d.Get("patches").([]interface{})
 
+	tflog.Info(ctx, fmt.Sprintf("Document: %s", document))
+
 	for _, patch := range patches {
+		tflog.Info(ctx, fmt.Sprintf("Patch: %v", patch))
+
 		if patch == nil {
 			continue
 		}
