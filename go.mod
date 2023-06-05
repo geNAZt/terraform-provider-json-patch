@@ -3,7 +3,7 @@ module github.com/geNAZt/terraform-provider-json-patch
 go 1.19
 
 require (
-	github.com/hashicorp/go-plugin v1.4.9
+	github.com/hashicorp/go-plugin v1.4.10
 	github.com/hashicorp/terraform-plugin-go v0.14.3
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.24.1
 	google.golang.org/grpc v1.51.0
